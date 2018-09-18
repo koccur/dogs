@@ -1,0 +1,6 @@
+<h2>Dogs page image</h2>
+<div class="container" *ngIf="photos$ |async as photos">
+  <div class="single-item">
+    <app-image [photo]="photos.photo[0]"></app-image>
+  </div>
+</div>
