@@ -81,17 +81,6 @@ export class HttpService {
     );
   }
 
-
-  //infinite scroll
-  // public getNextPictures(page: number, paramList:ParamObject[]) {
-  //
-  //   return this.http.get(this.searchUrl + UrlParamPrefixes.PAGE_PARAM_URL + page + this.endingUrl).pipe(map((wrapper: PhotosWrapper) => {
-  //     wrapper.photos.photo = this.getDogData().photo.concat(wrapper.photos.photo);
-  //     this.updateDogData(wrapper.photos);
-  //     return true;
-  //   }));
-  // };
-
   //infinite scroll
   public getNextPictures(paramsList: ParamObject[]): Observable<boolean> {
     const url = this.initializeUrl(paramsList);

@@ -5,7 +5,6 @@ import {ParamsNames} from "../model/Param";
 import {Photos} from "../model/Photos";
 import {filter} from "rxjs/operators";
 
-
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
@@ -13,14 +12,14 @@ import {filter} from "rxjs/operators";
 })
 export class MainComponent implements OnInit {
   public paramNames = ParamsNames;
-  private counterPage = 1;
-  public readonly photos$: Observable<Photos>;
-  private paramsList = [];
   public filters = [];
-  private isLoadingContent: boolean = false;
-  private licenses$: Observable<any>;
-  selectedLicense: any = null;
+  public selectedLicense: any = null;
   public errorMessage: string="";
+  public readonly photos$: Observable<Photos>;
+  private readonly licenses$: Observable<any>;
+  private isLoadingContent: boolean = false;
+  private counterPage = 1;
+  private paramsList = [];
 
   constructor(private httpService: HttpService,
               private elementRef: ElementRef) {
@@ -35,7 +34,6 @@ export class MainComponent implements OnInit {
 
   public findByFilter(paramValue: string = null, paramName = null, reset = true) {
     if (reset) {
-      this.counterPage = 1;
       this.resetParamList();
     }
     if (paramName) {
@@ -62,19 +60,7 @@ export class MainComponent implements OnInit {
     this.paramsList.push({key: this.paramNames.LICENSE, value: value});
   }
 
-  @HostListener('window:wheel', ['$event'])
-  private onWindowScroll($event) {
-    if ($event.wheelDeltaY < 0 && this.elementRef.nativeElement.offsetParent.clientHeight - $event.pageY < 1500) {
-      if (!this.isLoadingContent) {
-        this.getNextPictures(++this.counterPage);
-        this.isLoadingContent = true;
-      }
-    }
-  }
-
   private getNextPictures(page: number) {
-    debugger;
-    // this.findByFilter(page.toString(),ParamsNames.PAGE);
     this.paramsList.filter(filter => filter.key === ParamsNames.PAGE)[0].value = page;
     this.httpService.getNextPictures(this.paramsList).pipe(filter(v => !!v)).subscribe(() => this.isLoadingContent = false);
   }
@@ -110,6 +96,16 @@ export class MainComponent implements OnInit {
 
   private resetParamList() {
     this.paramsList = [];
+  }
+
+  @HostListener('window:wheel', ['$event'])
+  private onWindowScroll($event) {
+    if ($event.wheelDeltaY < 0 && this.elementRef.nativeElement.offsetParent.clientHeight - $event.pageY < 1500) {
+      if (!this.isLoadingContent && this.paramsList.length>0) {
+        this.getNextPictures(++this.counterPage);
+        this.isLoadingContent = true;
+      }
+    }
   }
 
 }

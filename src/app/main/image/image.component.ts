@@ -1,6 +1,5 @@
-import {HttpService} from "./../../services/http.service";
-import {Component, EventEmitter, Input, OnInit, Output, SecurityContext} from "@angular/core";
-import {DomSanitizer} from "@angular/platform-browser";
+import {HttpService} from "../../services/http.service";
+import {Component, Input, OnInit} from "@angular/core";
 import {Photo} from "../../model/Photo";
 import {delay} from "rxjs/operators";
 
@@ -25,6 +24,7 @@ export class ImageComponent implements OnInit {
   public getPhotoUrl() {
     if (!this.isPending) {
       this.isPending = true;
+      //delay for possibility for load gif
       this.httpService.getPhoto(this.photo).pipe(delay(2000)).subscribe(res=>{
         this.dogImage = res;
         this.isPending = false;
