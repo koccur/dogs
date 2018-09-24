@@ -1,7 +1,8 @@
-import { HttpService } from "./../../services/http.service";
-import { Component, OnInit, Input } from "@angular/core";
-import { DomSanitizer } from "@angular/platform-browser";
-import { BehaviorSubject } from "rxjs";
+import {HttpService} from "./../../services/http.service";
+import {Component, EventEmitter, Input, OnInit, Output, SecurityContext} from "@angular/core";
+import {DomSanitizer} from "@angular/platform-browser";
+import {Photo} from "../../model/Photo";
+import {delay} from "rxjs/operators";
 
 @Component({
   selector: "app-image",
@@ -9,14 +10,13 @@ import { BehaviorSubject } from "rxjs";
   styleUrls: ["./image.component.sass"]
 })
 export class ImageComponent implements OnInit {
-  public dogImage: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  @Input()
-  photo: Photo;
-  private isPending = false;
-  constructor(
-    private httpService: HttpService,
-    private _sanitizer: DomSanitizer
-  ) {}
+  public dogImage;
+  @Input() photo: Photo;
+  public isPending = false;
+  public errorMessage = '';
+
+  constructor(private httpService: HttpService) {
+  }
 
   ngOnInit() {
     this.getPhotoUrl();
@@ -25,10 +25,21 @@ export class ImageComponent implements OnInit {
   public getPhotoUrl() {
     if (!this.isPending) {
       this.isPending = true;
-      this.httpService.getDogPhoto(this.photo).subscribe((res: any) => {
-        this.dogImage.next("data:image/jpg;base64," + res);
+      this.httpService.getPhoto(this.photo).pipe(delay(2000)).subscribe(res=>{
+        this.dogImage = res;
         this.isPending = false;
+      }, error => {
+        console.log("Cannot load photo from service", this.photo.id);
+        this.errorMessage = 'There is problem with photo';
       });
     }
+  }
+
+  public showOwnerPhotos(ownerID) {
+    this.httpService.getOwnerPhotos(ownerID);
+  }
+
+  public showOnMap(photo) {
+    this.httpService.updateMapCoords(photo.coords);
   }
 }

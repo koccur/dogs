@@ -7,6 +7,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { HttpClientModule } from "@angular/common/http";
 import { MainModule } from "./main/main.module";
+import {FormsModule} from "@angular/forms";
 
 const appRoutes: Routes = [{ path: "", component: MainComponent }];
 
@@ -14,6 +15,7 @@ const appRoutes: Routes = [{ path: "", component: MainComponent }];
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    FormsModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes, {
       useHash: true

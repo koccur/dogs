@@ -1,10 +1,30 @@
 .container
+  display: flex
+  flex-direction: row
+  .photos-container
     display: flex
     flex-direction: row
-    max-width: 100%
+    max-width: 75%
+    width: 75%
     flex-wrap: wrap
     .single-item
+      margin: 1rem
+      border: 2px solid black
+      padding: 1rem
+      max-width: 20rem
+  .side-container
+    display: flex
+    flex-direction: column
+    max-width: 25%
+    width: 25%
+    position: sticky
+    top: 10px
+    height: 800px
+    .filters
+      padding: 2rem
+      .single-filter
         margin: 1rem
-        border: 2px solid black
-        padding: 1rem
-    
+        display: flex
+        justify-content: space-between
+.error-message
+  color: darkred

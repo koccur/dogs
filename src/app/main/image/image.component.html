@@ -1,21 +1,34 @@
-<p class="id">
-  Id: {{photo.id}}
-</p>
-<p class="title">
-  title: {{photo.title}}
-</p>
-<div class="photo-container">
-  <span>
-    <img [src]="dogImage">
+<div *ngIf="errorMessage.length===0;else error">
+  <p class="id">
+    Id: {{photo.id}}
+  </p>
+  <p class="title">
+    title: {{photo.title}}
+  </p>
+  <div class="photo-container">
+  <span *ngIf="!isPending">
+     <img [src]="dogImage">
   </span>
-</div>
-<p class="owner">
-  Owner: {{photo.owner}}
-</p>
-<p class="secret">
-  {{photo.secret}}
-</p>
+    <span *ngIf="isPending">
+    <img src="/assets/tenor.gif">
+  </span>
+  </div>
+  <p class="owner" (click)="showOwnerPhotos(photo.owner)">
+    Owner: {{photo.owner}}
+  </p>
+  <p class="secret">
+    {{photo.secret}}
+  </p>
 
-<p class="farm">
-  farm?: {{photo.farm}}
-</p>
+  <p class="farm">
+    farm?: {{photo.farm}}
+  </p>
+  <div *ngIf="photo.coords">
+    <span (click)="showOnMap(photo)">show on map</span>
+  </div>
+</div>
+<ng-template #error>
+  <div class="error">
+    {{errorMessage}}
+  </div>
+</ng-template>

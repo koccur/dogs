@@ -1,6 +1,40 @@
-<h2>Dogs page image</h2>
-<div class="container" *ngIf="photos$ |async as photos">
-  <div class="single-item">
-    <app-image [photo]="photos.photo[0]"></app-image>
+<h2 (click)="findByFilter('dogs',paramNames.TEXT)">Click to find dogs images</h2>
+
+<div class="container" >
+  <div class="photos-container" *ngIf="photos$ |async as photos;else emptyContainer">
+    <div class="single-item" *ngFor="let photo of photos.photo">
+      <app-image [photo]="photo"></app-image>
+    </div>
   </div>
+  <div class="side-container">
+    <div class="filters">
+      <h2>Filters</h2>
+      <h3 class="error-message" *ngIf="errorMessage.length>0">{{errorMessage}}</h3>
+      <div class="single-filter" *ngFor="let filter of filters">
+        <div class="filter-container" *ngIf="filter.name!==paramNames.LICENSE">
+        <span class="filter-name">{{filter.name}}</span>
+        <input *ngIf="filter.name !== paramNames.LICENSE" (keydown.enter)="findByFilter(filter.value,filter.name)"
+               [(ngModel)]="filter.value" [placeholder]="filter.name">
+        </div>
+      </div>
+      <div class="select-container" >
+        <span>
+          {{paramNames.LICENSE}}
+        </span>
+        <select *ngIf="licenses$ | async as licenses" [(ngModel)]="selectedLicense">
+          <option [value]="null" disabled> Please select one option </option>
+          <option *ngFor="let license of licenses.license" [value]="license.name">{{license.name}}</option>
+        </select>
+      </div>
+      <button (click)="findByFilter()">Find dogs!</button>
+      <button (click)="clearFilters()">Clear filters</button>
+    </div>
+    <app-map></app-map>
+  </div>
+
 </div>
+<ng-template #emptyContainer>
+  <div class="photo-container">
+
+  </div>
+</ng-template>
