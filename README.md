@@ -33,3 +33,8 @@ interfaces
 styling
 testing
 cleaning
+
+features
+service workers
+add some filters
+add gallery
