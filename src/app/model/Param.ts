@@ -6,6 +6,7 @@ export interface Param {
   minDate?:string;
   maxDate?:string;
   page?:string;
+  userId?:string
 }
 export enum ParamsNames{
   PAGE = 'page',
@@ -14,7 +15,17 @@ export enum ParamsNames{
   LICENSE = 'license',
   TAGS = 'tags',
   MIN_DATE = 'minDate',
-  MAX_DATE = 'maxDate'
+  MAX_DATE = 'maxDate',
+  USER_ID = 'userId'
+}
+export enum TextFilterNames{
+  PAGE = 'page',
+  PER_PAGE = 'perPage',
+  TEXT ='text',
+  TAGS = 'tags',
+  MIN_DATE = 'minDate',
+  MAX_DATE = 'maxDate',
+  USER_ID = 'userId'
 }
 export interface ParamObject {
   value:string,
@@ -31,7 +42,8 @@ MAX_DATE_PARAM_URL = '&maxDate=',
 USER_PARAM_URL = '&user_id=',
 PHOTO_ID_PARAM_URL = '&photo_id=',
 LAT_PARAM_URL = '&lat=',
-LON_PARAM_URL = '&lng='
+LON_PARAM_URL = '&lng=',
+USER_ID_URL = '&user_id='
 
 }
 

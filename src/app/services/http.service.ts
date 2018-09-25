@@ -144,6 +144,9 @@ export class HttpService {
         case ParamsNames.TEXT:
           url.push(UrlParamPrefixes.TEXT_PARAM_URL + param.value);
           break;
+        case ParamsNames.USER_ID:
+          url.push(UrlParamPrefixes.USER_ID_URL+param.value);
+          break;
         case ParamsNames.PER_PAGE:
           if (param.value.length === 0) {
             url.push(UrlParamPrefixes.QUANTITY_PER_PAGE_PARAM_URL + this.numberOfImages);

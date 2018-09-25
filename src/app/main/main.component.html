@@ -1,9 +1,11 @@
 <h2 (click)="findByFilter('dogs',paramNames.TEXT)">Click to find dogs images</h2>
 
-<div class="container" >
-  <div class="photos-container" *ngIf="photos$ |async as photos;else emptyContainer">
-    <div class="single-item" *ngFor="let photo of photos.photo">
-      <app-image [photo]="photo"></app-image>
+<div class="container">
+  <div class="wrapper" *ngIf="photos$ |async as photos">
+    <div class="photos-container" *ngIf="photos?.photo?.length>0;else emptyContainer">
+      <div class="single-item" *ngFor="let photo of photos.photo">
+        <app-image [photo]="photo" (onShowOwner)="findByFilter($event,paramNames.USER_ID)"></app-image>
+      </div>
     </div>
   </div>
   <div class="side-container">
@@ -11,18 +13,23 @@
       <h2>Filters</h2>
       <h3 class="error-message" *ngIf="errorMessage.length>0">{{errorMessage}}</h3>
       <div class="single-filter" *ngFor="let filter of filters">
-        <div class="filter-container" *ngIf="filter.name!==paramNames.LICENSE">
-        <span class="filter-name">{{filter.name}}</span>
-        <input *ngIf="filter.name !== paramNames.LICENSE" (keydown.enter)="findByFilter(filter.value,filter.name)"
-               [(ngModel)]="filter.value" [placeholder]="filter.name">
+        <div class="filter-container" *ngIf="filter.name!==paramNames.MIN_DATE &&filter.name !== paramNames.MAX_DATE">
+          <span class="filter-name">{{filter.name}}</span>
+          <input (keydown.enter)="findByFilter(filter.value,filter.name)" [(ngModel)]="filter.value"
+                 [placeholder]="filter.name">
+        </div>
+        <div class="dates-container" *ngIf="filter.name==paramNames.MIN_DATE  || filter.name == paramNames.MAX_DATE">
+          <span class="filter-name">{{filter.name}}</span>
+          <input [placeholder]="filter.name" [(ngModel)]="filter.value"
+                 (keydown.enter)="findByFilter(convertToTimeStamp(filter.value),filter.name)">
         </div>
       </div>
-      <div class="select-container" >
+      <div class="select-container">
         <span>
           {{paramNames.LICENSE}}
         </span>
         <select *ngIf="licenses$ | async as licenses" [(ngModel)]="selectedLicense">
-          <option [value]="null" disabled> Please select one option </option>
+          <option [value]="null" disabled> Please select one option</option>
           <option *ngFor="let license of licenses.license" [value]="license.name">{{license.name}}</option>
         </select>
       </div>
@@ -35,6 +42,6 @@
 </div>
 <ng-template #emptyContainer>
   <div class="photo-container">
-
+    <h1>Cannot find any photos!</h1>
   </div>
 </ng-template>

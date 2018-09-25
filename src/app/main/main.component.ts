@@ -1,7 +1,7 @@
 import {Observable} from "rxjs";
 import {Component, ElementRef, HostListener, OnInit} from "@angular/core";
 import {HttpService} from "../services/http.service";
-import {ParamsNames} from "../model/Param";
+import {ParamsNames, TextFilterNames} from "../model/Param";
 import {Photos} from "../model/Photos";
 import {filter} from "rxjs/operators";
 
@@ -59,6 +59,11 @@ export class MainComponent implements OnInit {
   public chooseLicense(value) {
     this.paramsList.push({key: this.paramNames.LICENSE, value: value});
   }
+  // todo: moment.js instead of date
+  public convertToTimeStamp(value){
+    let date = new Date(value);
+    return date;
+  }
 
   private getNextPictures(page: number) {
     this.paramsList.filter(filter => filter.key === ParamsNames.PAGE)[0].value = page;
@@ -75,7 +80,7 @@ export class MainComponent implements OnInit {
   }
 
   private fillupFilters() {
-    Object.values(ParamsNames).forEach(paramName => {
+    Object.values(TextFilterNames).forEach(paramName => {
       if (paramName === ParamsNames.PAGE) {
         this.filters.push({name: paramName, value: this.counterPage});
       } else {
@@ -98,7 +103,7 @@ export class MainComponent implements OnInit {
     this.paramsList = [];
   }
 
-  @HostListener('window:wheel', ['$event'])
+  @HostListener('window:wheel', ['$event'])//todo: window:scroll instead of wheel
   private onWindowScroll($event) {
     if ($event.wheelDeltaY < 0 && this.elementRef.nativeElement.offsetParent.clientHeight - $event.pageY < 1500) {
       if (!this.isLoadingContent && this.paramsList.length>0) {

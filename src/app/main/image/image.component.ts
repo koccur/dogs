@@ -1,5 +1,5 @@
 import {HttpService} from "../../services/http.service";
-import {Component, Input, OnInit} from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import {Photo} from "../../model/Photo";
 import {delay} from "rxjs/operators";
 
@@ -11,6 +11,7 @@ import {delay} from "rxjs/operators";
 export class ImageComponent implements OnInit {
   public dogImage;
   @Input() photo: Photo;
+  @Output() onShowOwner:EventEmitter<string>= new EventEmitter<string>();
   public isPending = false;
   public errorMessage = '';
 
@@ -36,7 +37,7 @@ export class ImageComponent implements OnInit {
   }
 
   public showOwnerPhotos(ownerID) {
-    this.httpService.getOwnerPhotos(ownerID);
+    this.onShowOwner.emit(ownerID)
   }
 
   public showOnMap(photo) {
